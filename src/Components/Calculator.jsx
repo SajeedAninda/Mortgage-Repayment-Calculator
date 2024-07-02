@@ -86,8 +86,8 @@ const Calculator = () => {
 
     return (
         <div className='bg-[#e3f3fd] h-fit flex w-full mx-auto rounded-l-2xl py-12'>
-            <div className='w-[70%] mx-auto flex bg-white rounded-l-2xl'>
-                <div className='calcDiv w-[50%] h-full bg-white rounded-l-2xl p-8'>
+            <div className='w-[95%] lg:w-[70%] mx-auto flex flex-col lg:flex-row bg-white rounded-l-2xl'>
+                <div className='calcDiv w-full lg:w-[50%] h-full bg-white rounded-l-2xl p-8'>
                     <div className='w-full flex justify-between items-center'>
                         <h2 className='text-[20px] text-[#122f37] font-bold'>Mortgage Calculator</h2>
                         <p className='text-[#4E6E7E] text-[13px] underline hover:text-[#122f37] cursor-pointer' onClick={handleClearAll}>Clear All</p>
@@ -112,7 +112,7 @@ const Calculator = () => {
                                 </div>
 
                             </div>
-                            <div className='mt-5 flex justify-between gap-5'>
+                            <div className='mt-5 flex flex-col lg:flex-row justify-between gap-5'>
                                 <div className='flex-1'>
                                     <label className='text-[16px] text-[#4E6E7E]' htmlFor="mortgageTerm">Mortgage Term</label>
                                     <div className='relative mt-2'>
@@ -189,14 +189,14 @@ const Calculator = () => {
                                     {selectedOptionError && <p className='text-[14px] mt-2 text-[#D73C37]'>{selectedOptionError}</p>}
                                 </div>
                             </div>
-                            <button type='submit' className='mt-8 py-3 w-[70%] rounded-[45px] text-[16px] font-bold text-[#122f37] flex justify-center items-center gap-3 bg-[#D7DA2F] hover:bg-[#DFE08A]'>
+                            <button type='submit' className='mt-8 py-3 w-full lg:w-[70%] rounded-[45px] text-[16px] font-bold text-[#122f37] flex justify-center items-center gap-3 bg-[#D7DA2F] hover:bg-[#DFE08A]'>
                                 <img src={calcImage} alt="" />
                                 Calculate Repayments
                             </button>
                         </form>
                     </div>
                 </div>
-                <div className='resultDiv w-[50%] h-full bg-[#122f37] p-8 rounded-bl-[70px]'>
+                <div className='resultDiv w-full lg:w-[50%] h-full bg-[#122f37] p-8 rounded-none lg:rounded-bl-[70px]'>
                     {monthlyPayment ? (
                         <>
                             <div>
