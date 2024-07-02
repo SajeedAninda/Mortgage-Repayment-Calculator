@@ -1,26 +1,71 @@
 import React, { useState } from 'react';
-import calcImage from "../assets/icon-calculator.svg"
-import emptyIcon from "../assets/illustration-empty.svg"
+import calcImage from "../assets/icon-calculator.svg";
+import emptyIcon from "../assets/illustration-empty.svg";
 
 const Calculator = () => {
     let [selectedOption, setSelectedOption] = useState('');
+    let [mortgageAmount, setMortgageAmount] = useState('');
+    let [mortgageTerm, setMortgageTerm] = useState('');
+    let [interestRate, setInterestRate] = useState('');
+
+    let [mortgageAmountError, setMortgageAmountError] = useState(null);
+    let [mortgageTermError, setMortgageTermError] = useState(null);
+    let [interestRateError, setInterestRateError] = useState(null);
+    let [mortgageTypeError, setMortgageTypeError] = useState(null);
 
     let handleOptionChange = (e) => {
         setSelectedOption(e.target.value);
     };
 
+    let handleCalculation = (e) => {
+        e.preventDefault();
+
+        let isError = false;
+
+        if (!mortgageAmount) {
+            setMortgageAmountError("This Field is Required");
+            isError = true;
+        } else {
+            setMortgageAmountError(null);
+        }
+
+        if (!mortgageTerm) {
+            setMortgageTermError("This Field is Required");
+            isError = true;
+        } else {
+            setMortgageTermError(null);
+        }
+
+        if (!interestRate) {
+            setInterestRateError("This Field is Required");
+            isError = true;
+        } else {
+            setInterestRateError(null);
+        }
+
+        if (!selectedOption) {
+            setMortgageTypeError("This Field is Required");
+            isError = true;
+        } else {
+            setMortgageTypeError(null);
+        }
+
+        if (!isError) {
+            // Your calculation logic here
+            console.log(mortgageAmount, mortgageTerm, interestRate, selectedOption);
+        }
+    };
+
     return (
-        <div className='bg-[#e3f3fd] h-screen flex items-center w-full mx-auto rounded-l-2xl py-12'>
-            <div className='w-[70%] h-full mx-auto flex items-center bg-white rounded-l-2xl '>
+        <div className='bg-[#e3f3fd] h-fit flex w-full mx-auto rounded-l-2xl py-12'>
+            <div className='w-[70%] mx-auto flex bg-white rounded-l-2xl'>
                 <div className='calcDiv w-[50%] h-full bg-white rounded-l-2xl p-8'>
                     <div className='w-full flex justify-between items-center'>
                         <h2 className='text-[20px] text-[#122f37] font-bold'>Mortgage Calculator</h2>
                         <p className='text-[#4E6E7E] text-[13px] underline hover:text-[#122f37] cursor-pointer'>Clear All</p>
                     </div>
-
-
                     <div className='mt-5'>
-                        <form>
+                        <form onSubmit={handleCalculation}>
                             <div>
                                 <label className='text-[16px] text-[#4E6E7E]' htmlFor="mortgageAmount">Mortgage Amount</label>
                                 <div className='relative mt-2'>
@@ -28,15 +73,17 @@ const Calculator = () => {
                                         £
                                     </label>
                                     <input
+                                        value={mortgageAmount}
+                                        onChange={(e) => { setMortgageAmount(e.target.value) }}
                                         className='block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border border-[#122f37] rounded-lg focus:outline-none focus:border-[#D7DA2F]'
                                         type="number"
                                         name="mortgageAmount"
                                         id="mortgageAmount"
                                     />
+                                    {mortgageAmountError && <p className='text-[14px] mt-2 text-[#D73C37]'>{mortgageAmountError}</p>}
                                 </div>
                             </div>
-
-                            <div className='mt-5 flex justify-between items-center gap-5'>
+                            <div className='mt-5 flex justify-between gap-5'>
                                 <div className='flex-1'>
                                     <label className='text-[16px] text-[#4E6E7E]' htmlFor="mortgageTerm">Mortgage Term</label>
                                     <div className='relative mt-2'>
@@ -44,15 +91,16 @@ const Calculator = () => {
                                             years
                                         </label>
                                         <input
+                                            value={mortgageTerm}
+                                            onChange={(e) => { setMortgageTerm(e.target.value) }}
                                             className='block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border border-[#122f37] rounded-lg focus:outline-none focus:border-[#D7DA2F]'
                                             type="number"
                                             name="mortgageTerm"
                                             id="mortgageTerm"
                                         />
+                                        {mortgageTermError && <p className='text-[14px] mt-2 text-[#D73C37]'>{mortgageTermError}</p>}
                                     </div>
                                 </div>
-
-
                                 <div className='flex-1'>
                                     <label className='text-[16px] text-[#4E6E7E]' htmlFor="interestRate">Interest Rate</label>
                                     <div className='relative mt-2'>
@@ -60,15 +108,17 @@ const Calculator = () => {
                                             %
                                         </label>
                                         <input
+                                            value={interestRate}
+                                            onChange={(e) => { setInterestRate(e.target.value) }}
                                             className='block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border border-[#122f37] rounded-lg focus:outline-none focus:border-[#D7DA2F]'
                                             type="number"
                                             name="interestRate"
                                             id="interestRate"
                                         />
+                                        {interestRateError && <p className='text-[14px] mt-2 text-[#D73C37]'>{interestRateError}</p>}
                                     </div>
                                 </div>
                             </div>
-
                             <div className='mt-5'>
                                 <label className='text-[16px] text-[#4E6E7E]' htmlFor="mortgageType">Mortgage Type</label>
                                 <div className='mt-2'>
@@ -106,24 +156,22 @@ const Calculator = () => {
                                             Interest Only
                                         </span>
                                     </label>
+
+                                    {mortgageTypeError && <p className='text-[14px] mt-2 text-[#D73C37]'>{mortgageTypeError}</p>}
                                 </div>
                             </div>
-
-                            <button className='mt-8 py-3 w-[70%] rounded-[45px] text-[16px] font-bold text-[#122f37] flex justify-center items-center gap-3 bg-[#D7DA2F] hover:bg-[#DFE08A]'>
+                            <button type='submit' className='mt-8 py-3 w-[70%] rounded-[45px] text-[16px] font-bold text-[#122f37] flex justify-center items-center gap-3 bg-[#D7DA2F] hover:bg-[#DFE08A]'>
                                 <img src={calcImage} alt="" />
                                 Calculate Repayments
                             </button>
                         </form>
                     </div>
                 </div>
-
                 <div className='resultDiv w-[50%] h-full bg-[#122f37] flex justify-center items-center gap-5 flex-col p-8 rounded-bl-[70px]'>
                     <img src={emptyIcon} alt="" />
-
                     <h3 className='text-white text-[20px] font-bold'>Results shown here</h3>
-
                     <p className='text-[#9ABED5] text-[16px] text-center'>
-                    Complete the form and click “calculate repayments” to see what your monthly repayments would be.
+                        Complete the form and click “calculate repayments” to see what your monthly repayments would be.
                     </p>
                 </div>
             </div>
