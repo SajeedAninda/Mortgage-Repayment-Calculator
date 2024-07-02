@@ -12,6 +12,8 @@ const Calculator = () => {
     const [mortgageTermError, setMortgageTermError] = useState(null);
     const [interestRateError, setInterestRateError] = useState(null);
     const [monthlyPayment, setMonthlyPayment] = useState(null);
+    const [selectedOptionError, setSelectedOptionError] = useState(null);
+
 
     const handleOptionChange = (e) => {
         setSelectedOption(e.target.value);
@@ -42,6 +44,14 @@ const Calculator = () => {
             setInterestRateError(null);
         }
 
+
+        if (!selectedOption) {
+            setSelectedOptionError("This Field is Required");
+            isError = true;
+        } else {
+            setSelectedOptionError(null);
+        }
+
         if (!isError) {
             const P = parseFloat(mortgageAmount);
             const r = parseFloat(interestRate) / 12;
@@ -59,13 +69,24 @@ const Calculator = () => {
         }
     };
 
+    const handleClearAll = () => {
+        setSelectedOption('');
+        setMortgageAmount('');
+        setMortgageTerm('');
+        setInterestRate('');
+        setMonthlyPayment(null);
+        setMortgageAmountError(null);
+        setMortgageTermError(null);
+        setInterestRateError(null);
+    };
+
     return (
         <div className='bg-[#e3f3fd] h-fit flex w-full mx-auto rounded-l-2xl py-12'>
             <div className='w-[70%] mx-auto flex bg-white rounded-l-2xl'>
                 <div className='calcDiv w-[50%] h-full bg-white rounded-l-2xl p-8'>
                     <div className='w-full flex justify-between items-center'>
                         <h2 className='text-[20px] text-[#122f37] font-bold'>Mortgage Calculator</h2>
-                        <p className='text-[#4E6E7E] text-[13px] underline hover:text-[#122f37] cursor-pointer'>Clear All</p>
+                        <p className='text-[#4E6E7E] text-[13px] underline hover:text-[#122f37] cursor-pointer' onClick={handleClearAll}>Clear All</p>
                     </div>
                     <div className='mt-5'>
                         <form onSubmit={handleCalculation}>
@@ -159,6 +180,8 @@ const Calculator = () => {
                                             Interest Only
                                         </span>
                                     </label>
+
+                                    {selectedOptionError && <p className='text-[14px] mt-2 text-[#D73C37]'>{selectedOptionError}</p>}
                                 </div>
                             </div>
                             <button type='submit' className='mt-8 py-3 w-[70%] rounded-[45px] text-[16px] font-bold text-[#122f37] flex justify-center items-center gap-3 bg-[#D7DA2F] hover:bg-[#DFE08A]'>
