@@ -1,8 +1,10 @@
+import Calculator from "./Components/Calculator";
+
 function App() {
 
   return (
     <>
-    Hey
+      <Calculator></Calculator>
     </>
   )
 }
