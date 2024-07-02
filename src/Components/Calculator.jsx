@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import calcImage from "../assets/icon-calculator.svg"
+import emptyIcon from "../assets/illustration-empty.svg"
 
 const Calculator = () => {
     let [selectedOption, setSelectedOption] = useState('');
@@ -9,8 +10,8 @@ const Calculator = () => {
     };
 
     return (
-        <div className='bg-[#e3f3fd] h-screen flex items-center w-full mx-auto rounded-l-2xl'>
-            <div className='w-[70%] mx-auto flex items-center bg-white rounded-l-2xl '>
+        <div className='bg-[#e3f3fd] h-screen flex items-center w-full mx-auto rounded-l-2xl py-12'>
+            <div className='w-[70%] h-full mx-auto flex items-center bg-white rounded-l-2xl '>
                 <div className='calcDiv w-[50%] h-full bg-white rounded-l-2xl p-8'>
                     <div className='w-full flex justify-between items-center'>
                         <h2 className='text-[20px] text-[#122f37] font-bold'>Mortgage Calculator</h2>
@@ -116,8 +117,14 @@ const Calculator = () => {
                     </div>
                 </div>
 
-                <div className='resultDiv w-[50%] h-full bg-[#122f37]'>
-                    hi
+                <div className='resultDiv w-[50%] h-full bg-[#122f37] flex justify-center items-center gap-5 flex-col p-8 rounded-bl-[70px]'>
+                    <img src={emptyIcon} alt="" />
+
+                    <h3 className='text-white text-[20px] font-bold'>Results shown here</h3>
+
+                    <p className='text-[#9ABED5] text-[16px] text-center'>
+                    Complete the form and click “calculate repayments” to see what your monthly repayments would be.
+                    </p>
                 </div>
             </div>
         </div>
