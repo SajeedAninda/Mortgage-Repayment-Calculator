@@ -3,23 +3,22 @@ import calcImage from "../assets/icon-calculator.svg";
 import emptyIcon from "../assets/illustration-empty.svg";
 
 const Calculator = () => {
-    let [selectedOption, setSelectedOption] = useState('');
-    let [mortgageAmount, setMortgageAmount] = useState('');
-    let [mortgageTerm, setMortgageTerm] = useState('');
-    let [interestRate, setInterestRate] = useState('');
+    const [selectedOption, setSelectedOption] = useState('');
+    const [mortgageAmount, setMortgageAmount] = useState('');
+    const [mortgageTerm, setMortgageTerm] = useState('');
+    const [interestRate, setInterestRate] = useState('');
 
-    let [mortgageAmountError, setMortgageAmountError] = useState(null);
-    let [mortgageTermError, setMortgageTermError] = useState(null);
-    let [interestRateError, setInterestRateError] = useState(null);
-    let [mortgageTypeError, setMortgageTypeError] = useState(null);
+    const [mortgageAmountError, setMortgageAmountError] = useState(null);
+    const [mortgageTermError, setMortgageTermError] = useState(null);
+    const [interestRateError, setInterestRateError] = useState(null);
+    const [monthlyPayment, setMonthlyPayment] = useState(null);
 
-    let handleOptionChange = (e) => {
+    const handleOptionChange = (e) => {
         setSelectedOption(e.target.value);
     };
 
-    let handleCalculation = (e) => {
+    const handleCalculation = (e) => {
         e.preventDefault();
-
         let isError = false;
 
         if (!mortgageAmount) {
@@ -43,16 +42,20 @@ const Calculator = () => {
             setInterestRateError(null);
         }
 
-        if (!selectedOption) {
-            setMortgageTypeError("This Field is Required");
-            isError = true;
-        } else {
-            setMortgageTypeError(null);
-        }
-
         if (!isError) {
-            // Your calculation logic here
-            console.log(mortgageAmount, mortgageTerm, interestRate, selectedOption);
+            const P = parseFloat(mortgageAmount);
+            const r = parseFloat(interestRate) / 12;
+            const n = parseInt(mortgageTerm) * 12;
+
+            let M = 0;
+
+            if (selectedOption === 'repayment') {
+                M = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            } else if (selectedOption === 'interestOnly') {
+                M = P * r;
+            }
+
+            setMonthlyPayment(M.toFixed(2));
         }
     };
 
@@ -156,8 +159,6 @@ const Calculator = () => {
                                             Interest Only
                                         </span>
                                     </label>
-
-                                    {mortgageTypeError && <p className='text-[14px] mt-2 text-[#D73C37]'>{mortgageTypeError}</p>}
                                 </div>
                             </div>
                             <button type='submit' className='mt-8 py-3 w-[70%] rounded-[45px] text-[16px] font-bold text-[#122f37] flex justify-center items-center gap-3 bg-[#D7DA2F] hover:bg-[#DFE08A]'>
@@ -168,11 +169,22 @@ const Calculator = () => {
                     </div>
                 </div>
                 <div className='resultDiv w-[50%] h-full bg-[#122f37] flex justify-center items-center gap-5 flex-col p-8 rounded-bl-[70px]'>
-                    <img src={emptyIcon} alt="" />
-                    <h3 className='text-white text-[20px] font-bold'>Results shown here</h3>
-                    <p className='text-[#9ABED5] text-[16px] text-center'>
-                        Complete the form and click “calculate repayments” to see what your monthly repayments would be.
-                    </p>
+                    {monthlyPayment ? (
+                        <>
+                            <h3 className='text-white text-[20px] font-bold'>Your Monthly Payment</h3>
+                            <p className='text-[#9ABED5] text-[16px] text-center'>
+                                £{monthlyPayment}
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <img src={emptyIcon} alt="" />
+                            <h3 className='text-white text-[20px] font-bold'>Results shown here</h3>
+                            <p className='text-[#9ABED5] text-[16px] text-center'>
+                                Complete the form and click “calculate repayments” to see what your monthly repayments would be.
+                            </p>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
