@@ -11,9 +11,9 @@ const Calculator = () => {
     const [mortgageAmountError, setMortgageAmountError] = useState(null);
     const [mortgageTermError, setMortgageTermError] = useState(null);
     const [interestRateError, setInterestRateError] = useState(null);
-    const [monthlyPayment, setMonthlyPayment] = useState(null);
     const [selectedOptionError, setSelectedOptionError] = useState(null);
-
+    const [monthlyPayment, setMonthlyPayment] = useState(null);
+    const [totalRepayment, setTotalRepayment] = useState(null);
 
     const handleOptionChange = (e) => {
         setSelectedOption(e.target.value);
@@ -44,7 +44,6 @@ const Calculator = () => {
             setInterestRateError(null);
         }
 
-
         if (!selectedOption) {
             setSelectedOptionError("This Field is Required");
             isError = true;
@@ -58,14 +57,18 @@ const Calculator = () => {
             const n = parseInt(mortgageTerm) * 12;
 
             let M = 0;
+            let totalRepaid = 0;
 
             if (selectedOption === 'repayment') {
                 M = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                totalRepaid = M * n;
             } else if (selectedOption === 'interestOnly') {
                 M = P * r;
+                totalRepaid = P;
             }
 
             setMonthlyPayment(M.toFixed(2));
+            setTotalRepayment(totalRepaid.toFixed(2));
         }
     };
 
@@ -75,6 +78,7 @@ const Calculator = () => {
         setMortgageTerm('');
         setInterestRate('');
         setMonthlyPayment(null);
+        setTotalRepayment(null);
         setMortgageAmountError(null);
         setMortgageTermError(null);
         setInterestRateError(null);
@@ -93,31 +97,32 @@ const Calculator = () => {
                             <div>
                                 <label className='text-[16px] text-[#4E6E7E]' htmlFor="mortgageAmount">Mortgage Amount</label>
                                 <div className='relative mt-2'>
-                                    <label className='absolute inset-y-0 left-[1px] h-fit flex items-center px-3 py-3 bg-[#e3f3fd] text-[#4E6E7E] text-[16px] font-bold rounded-l-lg top-[1px]'>
+                                    <label className={`absolute inset-y-0 left-[1px] h-fit flex items-center px-3 py-3 ${mortgageAmountError ? 'bg-[#D73C37] text-white' : 'bg-[#e3f3fd] text-[#4E6E7E]'} text-[16px] font-bold rounded-l-lg top-[1px]`}>
                                         £
                                     </label>
                                     <input
                                         value={mortgageAmount}
                                         onChange={(e) => { setMortgageAmount(e.target.value) }}
-                                        className='block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border border-[#122f37] rounded-lg focus:outline-none focus:border-[#D7DA2F]'
+                                        className={`block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border ${mortgageAmountError ? 'border-[#D73C37]' : 'border-[#122f37]'} rounded-lg focus:outline-none focus:border-[#D7DA2F]`}
                                         type="number"
                                         name="mortgageAmount"
                                         id="mortgageAmount"
                                     />
                                     {mortgageAmountError && <p className='text-[14px] mt-2 text-[#D73C37]'>{mortgageAmountError}</p>}
                                 </div>
+
                             </div>
                             <div className='mt-5 flex justify-between gap-5'>
                                 <div className='flex-1'>
                                     <label className='text-[16px] text-[#4E6E7E]' htmlFor="mortgageTerm">Mortgage Term</label>
                                     <div className='relative mt-2'>
-                                        <label className='absolute inset-y-0 right-[1px] h-fit flex items-center px-3 py-3 bg-[#e3f3fd] text-[#4E6E7E] text-[16px] font-bold rounded-r-lg top-[1px]'>
+                                        <label className={`absolute inset-y-0 right-[1px] h-fit flex items-center px-3 py-3 ${mortgageAmountError ? 'bg-[#D73C37] text-white' : 'bg-[#e3f3fd] text-[#4E6E7E]'} text-[16px] font-bold rounded-r-lg top-[1px]`}>
                                             years
                                         </label>
                                         <input
                                             value={mortgageTerm}
                                             onChange={(e) => { setMortgageTerm(e.target.value) }}
-                                            className='block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border border-[#122f37] rounded-lg focus:outline-none focus:border-[#D7DA2F]'
+                                            className={`block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border ${mortgageTermError ? 'border-[#D73C37]' : 'border-[#122f37]'} rounded-lg focus:outline-none focus:border-[#D7DA2F]`}
                                             type="number"
                                             name="mortgageTerm"
                                             id="mortgageTerm"
@@ -128,13 +133,13 @@ const Calculator = () => {
                                 <div className='flex-1'>
                                     <label className='text-[16px] text-[#4E6E7E]' htmlFor="interestRate">Interest Rate</label>
                                     <div className='relative mt-2'>
-                                        <label className='absolute inset-y-0 right-[1px] h-fit flex items-center px-3 py-3 bg-[#e3f3fd] text-[#4E6E7E] text-[16px] font-bold rounded-r-lg top-[1px]'>
+                                        <label className={`absolute inset-y-0 right-[1px] h-fit flex items-center px-3 py-3 ${mortgageAmountError ? 'bg-[#D73C37] text-white' : 'bg-[#e3f3fd] text-[#4E6E7E]'} text-[16px] font-bold rounded-r-lg top-[1px]`}>
                                             %
                                         </label>
                                         <input
                                             value={interestRate}
                                             onChange={(e) => { setInterestRate(e.target.value) }}
-                                            className='block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border border-[#122f37] rounded-lg focus:outline-none focus:border-[#D7DA2F]'
+                                            className={`block w-full pl-10 pr-3 py-3 text-[16px] font-bold text-[#4E6E7E] bg-transparent border ${interestRateError ? 'border-[#D73C37]' : 'border-[#122f37]'} rounded-lg focus:outline-none focus:border-[#D7DA2F]`}
                                             type="number"
                                             name="interestRate"
                                             id="interestRate"
@@ -191,21 +196,31 @@ const Calculator = () => {
                         </form>
                     </div>
                 </div>
-                <div className='resultDiv w-[50%] h-full bg-[#122f37] flex justify-center items-center gap-5 flex-col p-8 rounded-bl-[70px]'>
+                <div className='resultDiv w-[50%] h-full bg-[#122f37] p-8 rounded-bl-[70px]'>
                     {monthlyPayment ? (
                         <>
-                            <h3 className='text-white text-[20px] font-bold'>Your Monthly Payment</h3>
-                            <p className='text-[#9ABED5] text-[16px] text-center'>
-                                £{monthlyPayment}
-                            </p>
+                            <div>
+                                <h3 className='text-white text-[20px] font-bold text-left'>Your Results</h3>
+                                <p className='text-[#9ABED5] mt-3'>Your results are shown below based on the information you provided. To adjust the results, edit the form and click “calculate repayments” again.</p>
+
+                                <div className='w-full h-fit p-8 border-t-2 rounded-lg bg-[#0d252b] border-[#D7DA2F] mt-8'>
+                                    <p className='text-[#9ABED5]'>Your Monthly Repayments</p>
+                                    <p className='text-[55px] font-bold text-[#D7DA2F] pb-6'>£{monthlyPayment}</p>
+                                    <hr className='py-4' />
+                                    <p className='text-[#9ABED5]'>Total You will repay over the term</p>
+                                    <p className='text-white text-[20px] font-bold text-left'>£{totalRepayment}</p>
+                                </div>
+                            </div>
                         </>
                     ) : (
                         <>
-                            <img src={emptyIcon} alt="" />
-                            <h3 className='text-white text-[20px] font-bold'>Results shown here</h3>
-                            <p className='text-[#9ABED5] text-[16px] text-center'>
-                                Complete the form and click “calculate repayments” to see what your monthly repayments would be.
-                            </p>
+                            <div className='flex h-full justify-center items-center gap-5 flex-col'>
+                                <img src={emptyIcon} alt="" />
+                                <h3 className='text-white text-[20px] font-bold'>Results shown here</h3>
+                                <p className='text-[#9ABED5] text-[16px] text-center'>
+                                    Complete the form and click “calculate repayments” to see what your monthly repayments would be.
+                                </p>
+                            </div>
                         </>
                     )}
                 </div>
